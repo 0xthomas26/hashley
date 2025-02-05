@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from './theme';
 import { CssProvider } from './css';
+import { PrivyProvider } from './privy';
 
 interface Props {
     children: React.ReactNode;
@@ -10,7 +11,9 @@ interface Props {
 const Providers: React.FC<Props> = ({ children }) => {
     return (
         <CssProvider>
-            <ThemeProvider>{children}</ThemeProvider>
+            <ThemeProvider>
+                <PrivyProvider>{children}</PrivyProvider>
+            </ThemeProvider>
         </CssProvider>
     );
 };

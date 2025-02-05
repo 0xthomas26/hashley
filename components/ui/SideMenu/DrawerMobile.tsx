@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/navigation';
+import { usePrivy } from '@privy-io/react-auth';
 
 interface DrawerMobileProps {
     drawerOpen: boolean;
@@ -37,6 +38,7 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
 }) => {
     const theme = useTheme();
     const router = useRouter();
+    const { logout } = usePrivy();
 
     const navigateAccount = () => {
         router.push('/account');
@@ -50,6 +52,11 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
     const navigateToMain = () => {
         router.push('/chat');
         toggleDrawer();
+    };
+
+    const handleLogout = async () => {
+        await logout();
+        router.push('/');
     };
 
     return (
@@ -71,7 +78,8 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
                     width: 250,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: '100vh',
+                    minHeight: '100vh',
+                    overflow: 'auto',
                 }}
             >
                 {/* Header for Side Menu */}
@@ -182,7 +190,7 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
 
                 {/* Footer Menu Items */}
                 <List>
-                    <ListItemButton onClick={() => router.push('/')}>
+                    <ListItemButton onClick={() => handleLogout()}>
                         <Box
                             sx={{
                                 display: 'flex',

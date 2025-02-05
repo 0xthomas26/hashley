@@ -1,39 +1,31 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography } from '@mui/material';
-import Button from '@/components/ui/Button';
-import { useRouter } from 'next/navigation';
+import { Container, Typography } from '@mui/material';
+import FooterButtons from './_components/FooterButtons';
+import ChatInput from './_components/ChatInput';
 
 const ChatPage: React.FC = () => {
-    const router = useRouter();
-
     return (
-        <Box sx={{ height: '100%' }}>
-            <Container maxWidth="lg" sx={{ py: 8 }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                        height: '50vh',
-                    }}
-                >
-                    <Typography variant="h1" gutterBottom>
-                        Chat Page!
-                    </Typography>
-                    <Typography variant="body1" sx={{ my: 2, width: '80%', fontSize: '1.4rem' }} gutterBottom>
-                        AI-powered DeFi assistant that helps you track trending tokens, access real-time on-chain data,
-                        and execute swaps.
-                    </Typography>
-                    <Button sx={{ mt: 2 }} onClick={() => router.back()}>
-                        Back
-                    </Button>
-                </Box>
-            </Container>
-        </Box>
+        <Container
+            maxWidth="md"
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+            }}
+        >
+            <Typography variant="h3" sx={{ mb: 2, fontWeight: 'bold', textAlign: 'center' }}>
+                {`Good afternoon, from HashLEY!`}
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 4, textAlign: 'center' }}>
+                Your AI-powered DeFi agents.
+            </Typography>
+            <ChatInput />
+            <FooterButtons />
+        </Container>
     );
 };
 

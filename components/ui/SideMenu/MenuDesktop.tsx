@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/navigation';
+import { usePrivy } from '@privy-io/react-auth';
 
 interface MenuDesktopProps {
     collapsed: boolean;
@@ -37,11 +38,17 @@ const MenuDesktop: React.FC<MenuDesktopProps> = ({
 }) => {
     const theme = useTheme();
     const router = useRouter();
+    const { logout } = usePrivy();
 
     const toggleCollapse = () => setCollapsed((prev) => !prev);
 
     const navigateToChat = (index: number) => {
         router.push(`/chat/${index + 1}`);
+    };
+
+    const handleLogout = async () => {
+        await logout();
+        router.push('/');
     };
 
     return (
@@ -199,7 +206,7 @@ const MenuDesktop: React.FC<MenuDesktopProps> = ({
 
             {/* Footer Menu Items */}
             <List>
-                <ListItemButton sx={{ px: 2 }} onClick={() => router.push('/')}>
+                <ListItemButton sx={{ px: 2 }} onClick={() => handleLogout()}>
                     <ListItemText
                         primary={
                             collapsed ? (

@@ -3,16 +3,13 @@
 import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import Header from './_components/Header';
-import Button from '@/components/ui/Button';
-import { useRouter } from 'next/navigation';
+import LoginButton from './_components/LoginButton';
 
 const HomePage: React.FC = () => {
-    const router = useRouter();
-
     return (
-        <Box sx={{ height: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: '100vh' }}>
             <Header />
-            <Container maxWidth="lg" sx={{ py: 8 }}>
+            <Container maxWidth="lg" sx={{ py: 8, flexGrow: 1 }}>
                 <Box
                     sx={{
                         display: 'flex',
@@ -26,13 +23,11 @@ const HomePage: React.FC = () => {
                     <Typography variant="h1" gutterBottom>
                         {"Hi, I'm HashLEY 👋"}
                     </Typography>
-                    <Typography variant="body1" sx={{ my: 2, width: '80%', fontSize: '1.4rem' }} gutterBottom>
+                    <Typography variant="body1" sx={{ my: 2, width: '80%' }} gutterBottom>
                         AI-powered DeFi assistant that helps you track trending tokens, access real-time on-chain data,
                         and execute swaps.
                     </Typography>
-                    <Button sx={{ mt: 2 }} onClick={() => router.push('/chat')}>
-                        Get Started
-                    </Button>
+                    <LoginButton text="Get Started" sx={{ mt: 2 }} />
                 </Box>
             </Container>
         </Box>

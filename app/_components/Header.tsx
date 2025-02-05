@@ -19,8 +19,8 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import Image from 'next/image';
 import { ThemeMode, useThemeMode } from '../_contexts/theme';
-import Button from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
+import LoginButton from './LoginButton';
 
 // interface HeaderProps {}
 
@@ -55,7 +55,12 @@ const Header: React.FC<object> = ({}) => {
                     {/* Left: Logo */}
                     <Box display="flex" alignItems="center" gap={2}>
                         <Image
-                            src={mode === ThemeMode.DARK ? '/logos/hashley-dark.svg' : '/logos/hashley.svg'}
+                            src={
+                                mode === ThemeMode.DARK ||
+                                (mode === ThemeMode.SYSTEM && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                                    ? '/logos/hashley-dark.svg'
+                                    : '/logos/hashley.svg'
+                            }
                             alt="hashley logo"
                             width={120}
                             height={60}
@@ -72,7 +77,7 @@ const Header: React.FC<object> = ({}) => {
                         }}
                     >
                         <ThemeSwitcher />
-                        <Button onClick={() => handleNavigate('/chat')}>Get Started</Button>
+                        <LoginButton text="Get Started" />
                     </Box>
 
                     {/* Mobile Menu Icon */}

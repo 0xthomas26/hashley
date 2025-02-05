@@ -103,6 +103,11 @@ let lightTheme = createTheme({
                     background: customColors.primary,
                     transition: 'all 0.3s ease',
                     fontFamily: ibmPlexMono.style.fontFamily,
+                    '&.Mui-disabled': {
+                        color: '#000',
+                        background: customColors.primary,
+                        opacity: 0.5,
+                    },
                 },
             },
         },
@@ -194,6 +199,11 @@ let darkTheme = createTheme({
                     background: customColors.primary,
                     transition: 'all 0.3s ease',
                     fontFamily: ibmPlexMono.style.fontFamily,
+                    '&.Mui-disabled': {
+                        color: '#000',
+                        background: customColors.primary,
+                        opacity: 0.5,
+                    },
                 },
             },
         },

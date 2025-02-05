@@ -37,7 +37,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     const theme = useMemo(() => {
         if (!hydrated) return lightTheme; // Return a default theme during SSR
 
-        if (mode === ThemeMode.SYSTEM && typeof window !== 'undefined') {
+        if (mode === ThemeMode.SYSTEM) {
             return window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme;
         }
         return mode === ThemeMode.DARK ? darkTheme : lightTheme;
