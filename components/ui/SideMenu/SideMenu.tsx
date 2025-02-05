@@ -6,13 +6,19 @@ import { useTheme } from '@mui/material/styles';
 import { HiMenuAlt2 } from 'react-icons/hi';
 import DrawerMobile from './DrawerMobile';
 import MenuDesktop from './MenuDesktop';
+import { useUserChats } from '@/hooks/useChats';
+import { useParams, useRouter } from 'next/navigation';
+import { deleteChat } from '@/services/chats/chatServices';
+import { getAccessToken } from '@privy-io/react-auth';
 
 const SideMenu: React.FC<object> = ({}) => {
     const theme = useTheme();
+    const router = useRouter();
+    const params = useParams();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [chatsExpanded, setChatsExpanded] = useState(true);
-    const [chats, setChats] = useState(['chat1', 'chat2', 'chat3']);
+    const { chats, mutateChats } = useUserChats();
 
     const toggleDrawer = () => setDrawerOpen((prev) => !prev);
 
@@ -20,13 +26,20 @@ const SideMenu: React.FC<object> = ({}) => {
 
     const handleAddChat = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        setChats((prev) => [...prev, `Chat ${prev.length + 1}`]);
+        router.push('/chat');
         setChatsExpanded(true);
     };
 
-    const handleDeleteChat = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    const handleDeleteChat = async (e: React.MouseEvent<HTMLButtonElement>, chatId: string) => {
         e.stopPropagation();
-        setChats((prev) => prev.filter((_, i) => i !== index));
+
+        const token = await getAccessToken();
+        await deleteChat(chatId, token!);
+        mutateChats();
+
+        if (params?.id === chatId) {
+            router.push('/chat');
+        }
     };
 
     return (

@@ -16,15 +16,16 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/navigation';
 import { usePrivy } from '@privy-io/react-auth';
+import { Chat } from '@/types';
 
 interface DrawerMobileProps {
     drawerOpen: boolean;
     toggleDrawer: () => void;
-    chats: string[];
+    chats: Chat[] | undefined;
     chatsExpanded: boolean;
     toggleChatsExpanded: () => void;
     handleAddChat: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    handleDeleteChat: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+    handleDeleteChat: (e: React.MouseEvent<HTMLButtonElement>, chatId: string) => void;
 }
 
 const DrawerMobile: React.FC<DrawerMobileProps> = ({
@@ -45,10 +46,11 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
         toggleDrawer();
     };
 
-    const navigateToChat = (e: React.MouseEvent, index: number) => {
-        router.push(`/chat/${index + 1}`);
+    const navigateToChat = (e: React.MouseEvent, chatId: string) => {
+        router.push(`/chat/${chatId}`);
         toggleDrawer();
     };
+
     const navigateToMain = () => {
         router.push('/chat');
         toggleDrawer();
@@ -139,34 +141,35 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
                         </ListItemButton>
                         <Collapse in={chatsExpanded} timeout="auto" unmountOnExit>
                             <List>
-                                {chats.map((chat, index) => (
-                                    <ListItemButton
-                                        key={index}
-                                        sx={{
-                                            justifyContent: 'flex-start',
-                                            px: 2,
-                                            py: 0.5,
-                                        }}
-                                        onClick={(e) => navigateToChat(e, index)}
-                                    >
-                                        <Box
+                                {chats &&
+                                    chats?.map((chat, index) => (
+                                        <ListItemButton
+                                            key={index}
                                             sx={{
-                                                width: '100%',
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
+                                                justifyContent: 'flex-start',
+                                                px: 2,
+                                                py: 0.5,
                                             }}
+                                            onClick={(e) => navigateToChat(e, chat.id)}
                                         >
-                                            <Typography noWrap variant="body2">
-                                                {chat}
-                                            </Typography>
-                                            <IconButton size="small" onClick={(e) => handleDeleteChat(e, index)}>
-                                                <CiTrash />
-                                            </IconButton>
-                                        </Box>
-                                    </ListItemButton>
-                                ))}
+                                            <Box
+                                                sx={{
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <Typography noWrap variant="body2">
+                                                    {chat.id}
+                                                </Typography>
+                                                <IconButton size="small" onClick={(e) => handleDeleteChat(e, chat.id)}>
+                                                    <CiTrash />
+                                                </IconButton>
+                                            </Box>
+                                        </ListItemButton>
+                                    ))}
                             </List>
                         </Collapse>
                     </Box>

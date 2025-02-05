@@ -6,7 +6,11 @@ import ModelMenu from './ModelMenu';
 import { Models } from '@/types';
 import { ThemeMode, useThemeMode } from '@/app/_contexts/theme';
 
-const ChatInput: React.FC = () => {
+interface ChatInputProps {
+    chatId: string | null;
+}
+
+const ChatInput: React.FC<ChatInputProps> = ({ chatId = null }) => {
     const theme = useTheme();
     const { mode } = useThemeMode();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -14,7 +18,7 @@ const ChatInput: React.FC = () => {
 
     return (
         <Paper sx={{ width: '100%', px: 2, py: 2, mb: 4, borderRadius: '10px' }} elevation={3}>
-            <MessageInput selectedModel={selectedModel} />
+            <MessageInput selectedModel={selectedModel} chatId={chatId} />
             <Box
                 sx={{
                     display: 'flex',
