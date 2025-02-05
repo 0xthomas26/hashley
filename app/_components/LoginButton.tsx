@@ -8,14 +8,14 @@ import { ButtonProps } from '@mui/material';
 
 interface LoginButtonProps extends ButtonProps {
     text: string;
-    loading?: boolean | null;
+    loading?: boolean;
 }
 
-const LoginButton: React.FC<LoginButtonProps> = ({ text, loading, ...props }) => {
+const LoginButton: React.FC<LoginButtonProps> = ({ text, loading = false, ...props }) => {
     const router = useRouter();
     const { ready, authenticated, login } = usePrivy();
 
-    const disableLogin = !ready || (ready && authenticated);
+    const disableLogin = !ready || (ready && authenticated) || loading;
 
     useEffect(() => {
         if (authenticated) {

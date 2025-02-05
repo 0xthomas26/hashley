@@ -19,7 +19,6 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.next();
 };
 
-// Apply this middleware to all routes under /app/pages/chat
 export const config = {
-    matcher: '/chat/:path*',
+    matcher: ['/chat/:path*', '/account'],
 };

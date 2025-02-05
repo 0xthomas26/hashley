@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Card, CardContent } from '@mui/material';
-import { ThemeMode, useThemeMode } from '@/app/_contexts/theme';
 
 const footerButtons = [{ title: 'Trending' }, { title: 'Trade' }, { title: 'Stake' }, { title: 'Knowledge' }];
 
 const FooterButtons: React.FC = () => {
-    const { mode } = useThemeMode();
     return (
         <Box
             sx={{
