@@ -3,22 +3,16 @@ import { Paper, Box, Typography, useTheme } from '@mui/material';
 import MessageInput from './MessageInput';
 import MenuButton from './MenuButton';
 import ModelMenu from './ModelMenu';
-import { Models } from '@/types';
 import { ThemeMode, useThemeMode } from '@/app/_contexts/theme';
 
-interface ChatInputProps {
-    chatId: string | null;
-}
-
-const ChatInput: React.FC<ChatInputProps> = ({ chatId = null }) => {
+const ChatInput: React.FC = () => {
     const theme = useTheme();
     const { mode } = useThemeMode();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [selectedModel, setSelectedModel] = useState<string>(Models.OpenAI);
 
     return (
         <Paper sx={{ width: '100%', px: 2, py: 2, mb: 4, borderRadius: '10px' }} elevation={3}>
-            <MessageInput selectedModel={selectedModel} chatId={chatId} />
+            <MessageInput />
             <Box
                 sx={{
                     display: 'flex',
@@ -28,13 +22,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatId = null }) => {
                     mt: 2,
                 }}
             >
-                <MenuButton setAnchorEl={setAnchorEl} selectedModel={selectedModel} />
-                <ModelMenu
-                    selectedModel={selectedModel}
-                    setSelectedModel={setSelectedModel}
-                    anchorEl={anchorEl}
-                    setAnchorEl={setAnchorEl}
-                />
+                <MenuButton setAnchorEl={setAnchorEl} />
+                <ModelMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mt: { xs: 2, md: 0 } }}>
                     Use{' '}
                     <Box

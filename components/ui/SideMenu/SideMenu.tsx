@@ -10,6 +10,7 @@ import { useUserChats } from '@/hooks/useChats';
 import { useParams, useRouter } from 'next/navigation';
 import { deleteChat } from '@/services/chats/chatServices';
 import { getAccessToken } from '@privy-io/react-auth';
+import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 const SideMenu: React.FC<object> = ({}) => {
     const theme = useTheme();
@@ -18,7 +19,9 @@ const SideMenu: React.FC<object> = ({}) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [chatsExpanded, setChatsExpanded] = useState(true);
+
     const { chats, mutateChats } = useUserChats();
+    const { resetChat } = useChat();
 
     const toggleDrawer = () => setDrawerOpen((prev) => !prev);
 
@@ -28,6 +31,7 @@ const SideMenu: React.FC<object> = ({}) => {
         e.stopPropagation();
         router.push('/chat');
         setChatsExpanded(true);
+        resetChat();
     };
 
     const handleDeleteChat = async (e: React.MouseEvent<HTMLButtonElement>, chatId: string) => {
@@ -39,6 +43,7 @@ const SideMenu: React.FC<object> = ({}) => {
 
         if (params?.id === chatId) {
             router.push('/chat');
+            resetChat();
         }
     };
 

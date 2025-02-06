@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
-import { Box, CircularProgress, IconButton, TextField, useTheme } from '@mui/material';
+import { Box, IconButton, TextField, useTheme } from '@mui/material';
 import { FaArrowUp } from 'react-icons/fa';
-import { createChat, sendMessage } from '@/services/chats/chatServices';
+import { useChat } from '../_contexts/chat';
+import { useParams, useRouter } from 'next/navigation';
+// import CircularLoading from '@/components/ui/CircularLoading';
+import { StopCircleRounded } from '@mui/icons-material';
+import { createChat } from '@/services/chats/chatServices';
 import { usePrivy } from '@privy-io/react-auth';
-import { useChatMessages, useUserChats } from '@/hooks/useChats';
-import { useRouter } from 'next/navigation';
 
-interface MessageInputProps {
-    selectedModel: string;
-    chatId: string | null;
-}
-
-const MessageInput: React.FC<MessageInputProps> = ({ selectedModel, chatId }) => {
+const MessageInput: React.FC = () => {
     const theme = useTheme();
     const router = useRouter();
-    const [message, setMessage] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>('');
 
     const { getAccessToken } = usePrivy();
-    const { mutateChats } = useUserChats();
-    const { mutateMessages } = useChatMessages(chatId);
+    const { id } = useParams();
+
+    const { chatId, isLoading, isResponseLoading, isError, sendMessage, stop } = useChat();
+
+    const [input, setInput] = useState<string>('');
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -30,30 +27,14 @@ const MessageInput: React.FC<MessageInputProps> = ({ selectedModel, chatId }) =>
     };
 
     const handleSubmit = async () => {
-        if (!message) return;
-
-        setIsLoading(true);
-        setError('');
-
-        try {
+        if (id !== chatId) {
             const token = await getAccessToken();
-            if (chatId) {
-                const data = await sendMessage(chatId, message, selectedModel, token!);
-                console.log('Message sent successfully:', data);
-            } else {
-                const data = await createChat(message, selectedModel, token!);
-                router.push(`/chat/${data.id}`);
-                console.log('Chat created successfully:', data);
-            }
-            mutateChats();
-            mutateMessages();
-            setMessage('');
-        } catch (error: any) {
-            console.error('Error sending message:', error);
-            setError('Failed to send message. Please try again.');
-        } finally {
-            setIsLoading(false);
+            await createChat(chatId, token!);
+            router.push(`/chat/${chatId}`);
         }
+        sendMessage(input);
+
+        setInput('');
     };
 
     return (
@@ -71,8 +52,8 @@ const MessageInput: React.FC<MessageInputProps> = ({ selectedModel, chatId }) =>
                     variant="standard"
                     multiline
                     maxRows={10}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyPress}
                     slotProps={{
                         input: {
@@ -84,10 +65,11 @@ const MessageInput: React.FC<MessageInputProps> = ({ selectedModel, chatId }) =>
                             borderBottom: 'none',
                         },
                     }}
+                    disabled={isLoading || isResponseLoading}
                 />
                 <IconButton
-                    onClick={handleSubmit}
-                    disabled={message.length === 0}
+                    onClick={() => (isLoading ? stop() : handleSubmit())}
+                    disabled={input.length === 0 && !isLoading}
                     sx={{
                         background: theme.palette.primary.main,
                         color: theme.palette.primary.contrastText,
@@ -100,13 +82,13 @@ const MessageInput: React.FC<MessageInputProps> = ({ selectedModel, chatId }) =>
                     }}
                 >
                     {isLoading ? (
-                        <CircularProgress size={20} />
+                        <StopCircleRounded />
                     ) : (
                         <FaArrowUp style={{ fontSize: theme.typography.fontSize * 1.4 }} />
                     )}
                 </IconButton>
             </Box>
-            {error && <Box sx={{ color: 'error.main', mt: 1 }}>{error}</Box>}
+            {isError && <Box sx={{ color: 'error.main', mt: 1 }}>An error occured. Please try again.</Box>}
         </Box>
     );
 };

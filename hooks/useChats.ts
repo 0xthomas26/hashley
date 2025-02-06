@@ -47,6 +47,33 @@ export const useUserChats = () => {
     };
 };
 
+export const useChatId = (chatId: string | null) => {
+    const [token, setToken] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchToken = async () => {
+            const authToken = await getAccessToken();
+            setToken(authToken);
+        };
+        fetchToken();
+    }, []);
+
+    const { data, error, mutate, isLoading } = useSWR<Chat>(
+        chatId && token ? [`/api/chats/${chatId}`, token] : null,
+        fetcher,
+        {
+            refreshInterval: 5000,
+        }
+    );
+
+    return {
+        chat: data,
+        mutateChat: mutate,
+        isLoading: isLoading,
+        isError: error,
+    };
+};
+
 export const useChatMessages = (chatId: string | null) => {
     const [token, setToken] = useState<string | null>(null);
 

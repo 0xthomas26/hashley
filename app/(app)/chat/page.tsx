@@ -23,7 +23,7 @@ const ChatPage: React.FC = () => {
             <Typography variant="body1" sx={{ mb: 4, textAlign: 'center' }}>
                 Your AI-powered DeFi agents.
             </Typography>
-            <ChatInput chatId={null} />
+            <ChatInput />
             <FooterButtons />
         </Container>
     );

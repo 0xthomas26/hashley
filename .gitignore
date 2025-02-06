@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 /.vscode
+/scripts
 
 # testing
 /coverage

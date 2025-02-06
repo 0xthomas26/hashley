@@ -1,6 +1,6 @@
 const BASE_URL = '/api/chats';
 
-export const createChat = async (message: string, model: string, token: string): Promise<any> => {
+export const createChat = async (chatId: string, token: string): Promise<any> => {
     try {
         const response = await fetch(BASE_URL, {
             method: 'POST',
@@ -8,7 +8,7 @@ export const createChat = async (message: string, model: string, token: string):
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ message, model }),
+            body: JSON.stringify({ chatId }),
         });
 
         if (!response.ok) {

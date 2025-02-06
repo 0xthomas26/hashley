@@ -17,6 +17,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/navigation';
 import { usePrivy } from '@privy-io/react-auth';
 import { Chat } from '@/types';
+import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 interface MenuDesktopProps {
     collapsed: boolean;
@@ -40,6 +41,7 @@ const MenuDesktop: React.FC<MenuDesktopProps> = ({
     const theme = useTheme();
     const router = useRouter();
     const { logout } = usePrivy();
+    const { resetChat } = useChat();
 
     const toggleCollapse = () => setCollapsed((prev) => !prev);
 
@@ -50,6 +52,11 @@ const MenuDesktop: React.FC<MenuDesktopProps> = ({
     const handleLogout = async () => {
         await logout();
         router.push('/');
+    };
+
+    const navigateToMain = () => {
+        router.push('/chat');
+        resetChat();
     };
 
     return (
@@ -75,7 +82,7 @@ const MenuDesktop: React.FC<MenuDesktopProps> = ({
                 }}
             >
                 {!collapsed && (
-                    <Box onClick={() => router.push('/chat')} sx={{ cursor: 'pointer' }}>
+                    <Box onClick={() => navigateToMain()} sx={{ cursor: 'pointer' }}>
                         <Typography variant="h3" sx={{ display: collapsed ? 'none' : 'block', fontSize: '20px' }}>
                             HashLEY
                         </Typography>

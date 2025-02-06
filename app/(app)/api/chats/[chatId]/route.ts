@@ -1,10 +1,10 @@
 'use server';
 
 import { NextResponse, NextRequest } from 'next/server';
-import { deleteChatById, getChatById } from '@/services/supabase/chats';
-import { createMessage } from '@/services/supabase/messages';
+import { deleteChatById, getChatById, updateMessagesByChatId } from '@/services/supabase/chats';
 import { verifyToken } from '@/lib/auth';
 
+// GET CHAT BY ID
 export const GET = async (req: NextRequest, { params }: { params: Promise<{ chatId: string }> }) => {
     try {
         const { chatId } = await params;
@@ -22,17 +22,17 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ chat
     }
 };
 
+// UPDATE MESSAGES BY CHAT ID
 export const POST = async (req: NextRequest, { params }: { params: Promise<{ chatId: string }> }) => {
     try {
         const { chatId } = await params;
 
-        const { message } = await req.json();
+        const { messages } = await req.json();
 
         const { userId, error } = await verifyToken(req);
         if (!userId || error) return NextResponse.json({ error: error || 'Missing user ID' }, { status: 401 });
 
-        const chat = await getChatById(chatId);
-        if (chat?.id) await createMessage(chat.id, userId, message, 'user');
+        const chat = await updateMessagesByChatId(chatId, userId, messages);
 
         return NextResponse.json(chat);
     } catch (error: any) {
@@ -40,6 +40,7 @@ export const POST = async (req: NextRequest, { params }: { params: Promise<{ cha
     }
 };
 
+// DELETE CHAT BY ID
 export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ chatId: string }> }) => {
     try {
         const { chatId } = await params;

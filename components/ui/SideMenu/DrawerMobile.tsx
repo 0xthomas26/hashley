@@ -17,6 +17,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/navigation';
 import { usePrivy } from '@privy-io/react-auth';
 import { Chat } from '@/types';
+import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 interface DrawerMobileProps {
     drawerOpen: boolean;
@@ -40,6 +41,7 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
     const theme = useTheme();
     const router = useRouter();
     const { logout } = usePrivy();
+    const { resetChat } = useChat();
 
     const navigateAccount = () => {
         router.push('/account');
@@ -54,6 +56,7 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
     const navigateToMain = () => {
         router.push('/chat');
         toggleDrawer();
+        resetChat();
     };
 
     const handleLogout = async () => {

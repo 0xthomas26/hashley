@@ -3,27 +3,22 @@ import { Button } from '@mui/material';
 import { KeyboardArrowDownRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import { modelLogos } from '@/types';
+import { useChat } from '../_contexts/chat';
 
 interface MenuButtonProps {
     setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
-    selectedModel: string;
 }
 
-const MenuButton: React.FC<MenuButtonProps> = ({ setAnchorEl, selectedModel }) => {
+const MenuButton: React.FC<MenuButtonProps> = ({ setAnchorEl }) => {
+    const { model } = useChat();
+
     return (
         <Button
             variant="text"
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(e.currentTarget)}
-            startIcon={
-                <Image
-                    src={modelLogos[selectedModel as keyof typeof modelLogos]}
-                    width={18}
-                    height={18}
-                    alt={selectedModel}
-                />
-            }
+            startIcon={<Image src={modelLogos[model as keyof typeof modelLogos]} width={18} height={18} alt={model} />}
             endIcon={<KeyboardArrowDownRounded />}
             sx={{
                 color: 'text.primary',
@@ -33,7 +28,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ setAnchorEl, selectedModel }) =
                 },
             }}
         >
-            {selectedModel}
+            {model}
         </Button>
     );
 };

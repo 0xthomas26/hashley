@@ -1,6 +1,7 @@
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
 import { supabase } from './client';
 import { Chat } from '@/types/chats';
+import { Message } from 'ai';
 
 export const getUserChats = async (userId: string): Promise<Chat[] | null> => {
     try {
@@ -38,11 +39,11 @@ export const getChatById = async (chatId: string): Promise<Chat | null> => {
     }
 };
 
-export const createChat = async (userId: string): Promise<Chat | null> => {
+export const createChat = async (userId: string, chatId: string): Promise<Chat | null> => {
     try {
         const response: PostgrestSingleResponse<Chat | null> = await supabase
             .from('chats')
-            .insert([{ user_id: userId }])
+            .insert([{ id: chatId, user_id: userId }])
             .select('*')
             .single();
 
@@ -78,5 +79,29 @@ export const deleteChatById = async (chatId: string): Promise<boolean> => {
     } catch (error: any) {
         console.error('Unexpected error fetching user chats:', error?.message);
         return false;
+    }
+};
+
+export const updateMessagesByChatId = async (
+    chatId: string,
+    userId: string,
+    newMessages: Message[]
+): Promise<Chat | null> => {
+    try {
+        const { data, error } = await supabase
+            .from('chats')
+            .upsert([{ id: chatId, user_id: userId, messages: newMessages }], { onConflict: 'id' })
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Error updating/inserting chat messages:', error);
+            return null;
+        }
+
+        return data;
+    } catch (error: any) {
+        console.error('Unexpected error updating/inserting chat messages:', error?.message);
+        return null;
     }
 };

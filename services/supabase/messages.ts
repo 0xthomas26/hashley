@@ -1,16 +1,16 @@
 import { supabase } from './client';
-import { Message } from '@/types/messages';
+import { Message, Role } from '@/types/messages';
 
 export const createMessage = async (
     chatId: string,
     userId: string,
-    text: string,
-    role: 'user' | 'agent'
+    content: string,
+    role: Role
 ): Promise<Message | null> => {
     try {
         const { data, error } = await supabase
             .from('messages')
-            .insert([{ chat_id: chatId, user_id: userId, text: text, role: role }]);
+            .insert([{ chat_id: chatId, user_id: userId, content: content, role: role }]);
 
         if (error) {
             console.error('Error creating message:', error);

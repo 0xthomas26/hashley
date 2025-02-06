@@ -3,19 +3,20 @@ import { Menu, MenuItem, Box } from '@mui/material';
 import { CheckRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import { modelLogos, Models } from '@/types';
+import { useChat } from '../_contexts/chat';
 
 interface ModelMenuProps {
-    selectedModel: string;
-    setSelectedModel: React.Dispatch<React.SetStateAction<string>>;
     anchorEl: HTMLElement | null;
     setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }
 
-const ModelMenu: React.FC<ModelMenuProps> = ({ selectedModel, setSelectedModel, anchorEl, setAnchorEl }) => {
+const ModelMenu: React.FC<ModelMenuProps> = ({ anchorEl, setAnchorEl }) => {
+    const { model, setModel } = useChat();
+
     const handleClose = () => setAnchorEl(null);
 
-    const handleMenuItemClick = (model: string) => {
-        setSelectedModel(model);
+    const handleMenuItemClick = (model: Models) => {
+        setModel(model);
         setAnchorEl(null);
     };
 
@@ -31,7 +32,7 @@ const ModelMenu: React.FC<ModelMenuProps> = ({ selectedModel, setSelectedModel, 
                         justifyContent: 'space-between',
                         fontSize: '0.8rem',
                         minWidth: '165px',
-                        fontWeight: modelValue === selectedModel ? 'bold' : 'normal',
+                        fontWeight: modelValue === model ? 'bold' : 'normal',
                     }}
                 >
                     <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
@@ -44,7 +45,7 @@ const ModelMenu: React.FC<ModelMenuProps> = ({ selectedModel, setSelectedModel, 
                         />
                         {modelValue}
                     </Box>
-                    {modelValue === selectedModel && <CheckRounded sx={{ fontSize: '18px' }} />}
+                    {modelValue === model && <CheckRounded sx={{ fontSize: '18px' }} />}
                 </MenuItem>
             ))}
         </Menu>

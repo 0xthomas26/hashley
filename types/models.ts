@@ -1,4 +1,5 @@
 export enum Models {
+    Meta = 'Llama',
     OpenAI = 'Open AI',
     Anthropic = 'Anthropic',
     XAI = 'XAI',
@@ -7,6 +8,7 @@ export enum Models {
 }
 
 export const modelLogos = {
+    [Models.Meta]: '/logos/meta.png',
     [Models.OpenAI]: '/logos/openai.png',
     [Models.Anthropic]: '/logos/anthropic.png',
     [Models.XAI]: '/logos/xai.png',
