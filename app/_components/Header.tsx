@@ -57,7 +57,9 @@ const Header: React.FC<object> = ({}) => {
                         <Image
                             src={
                                 mode === ThemeMode.DARK ||
-                                (mode === ThemeMode.SYSTEM && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                                (mode === ThemeMode.SYSTEM &&
+                                    typeof window !== 'undefined' &&
+                                    window.matchMedia('(prefers-color-scheme: dark)').matches)
                                     ? '/logos/hashley-dark.svg'
                                     : '/logos/hashley.svg'
                             }

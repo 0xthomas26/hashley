@@ -11,6 +11,8 @@
         "prettier-write": "prettier --write '*/**/*.{js,jsx,ts,tsx,css,md}'"
     },
     "dependencies": {
+        "@ai-sdk/google": "^1.1.16",
+        "@ai-sdk/provider": "^1.0.8",
         "@emotion/cache": "^11.14.0",
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
@@ -18,21 +20,27 @@
         "@mui/material": "^6.4.0",
         "@privy-io/react-auth": "^2.2.1",
         "@privy-io/server-auth": "^1.18.4",
+        "@solana/web3.js": "^1.98.0",
         "@supabase/supabase-js": "^2.48.1",
-        "ai": "^4.1.24",
+        "ai": "^4.1.44",
+        "highlight.js": "^11.11.1",
         "next": "15.1.5",
         "nookies": "^2.5.2",
         "ollama-ai-provider": "^1.2.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-icons": "^5.4.0",
-        "swr": "^2.3.1"
+        "react-markdown": "^9.0.3",
+        "react-syntax-highlighter": "^15.6.1",
+        "swr": "^2.3.1",
+        "zod": "^3.24.1"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "@types/react-syntax-highlighter": "^15.5.13",
         "@typescript-eslint/eslint-plugin": "^8.20.0",
         "@typescript-eslint/parser": "^8.20.0",
         "eslint": "^9",
@@ -53,6 +61,13 @@
             "cookie@<0.7.0": ">=0.7.0",
             "elliptic@<6.6.0": ">=6.6.0",
             "elliptic@<6.5.6": ">=6.5.6"
-        }
+        },
+        "onlyBuiltDependencies": [
+            "bigint-buffer",
+            "bufferutil",
+            "keccak",
+            "sharp",
+            "utf-8-validate"
+        ]
     }
 }

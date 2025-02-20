@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { CssBaseline } from '@mui/material';
 import Providers from './_contexts';
 
 export const metadata: Metadata = {
@@ -12,10 +11,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html lang="en">
             <body>
-                <Providers>
-                    <CssBaseline />
-                    {children}
-                </Providers>
+                <Providers>{children}</Providers>
             </body>
         </html>
     );

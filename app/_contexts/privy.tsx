@@ -17,13 +17,17 @@ export const PrivyProvider: React.FC<PrivyProviderProps> = ({ children }) => {
                 appearance: {
                     theme:
                         mode === ThemeMode.DARK ||
-                        (mode === ThemeMode.SYSTEM && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                        (mode === ThemeMode.SYSTEM &&
+                            typeof window !== 'undefined' &&
+                            window.matchMedia('(prefers-color-scheme: dark)').matches)
                             ? 'dark'
                             : 'light',
                     accentColor: '#284c47',
                     logo:
                         mode === ThemeMode.DARK ||
-                        (mode === ThemeMode.SYSTEM && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                        (mode === ThemeMode.SYSTEM &&
+                            typeof window !== 'undefined' &&
+                            window.matchMedia('(prefers-color-scheme: dark)').matches)
                             ? 'https://hashley-two.vercel.app/logos/hashley-dark.svg'
                             : 'https://hashley-two.vercel.app/logos/hashley.svg',
                 },

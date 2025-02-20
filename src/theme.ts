@@ -1,3 +1,5 @@
+'use client';
+
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { Chakra_Petch, IBM_Plex_Mono } from 'next/font/google';
 
@@ -35,6 +37,7 @@ let lightTheme = createTheme({
         background: {
             default: customColors.lightBackground,
             paper: '#fff',
+            code: '#f5f5f5',
         },
         text: {
             primary: '#000000',
@@ -130,7 +133,8 @@ let darkTheme = createTheme({
         },
         background: {
             default: customColors.darkSecondary,
-            paper: '#1B2F2A',
+            paper: '#334340',
+            code: '#0D0D0D',
         },
         text: {
             primary: '#FFFFFF',

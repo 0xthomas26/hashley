@@ -25,6 +25,7 @@ interface ChatContextType {
     chatId: string;
     isError: string | null;
     stop: () => void;
+    loadingChat: boolean;
 }
 
 const ChatContext = createContext<ChatContextType>({
@@ -41,6 +42,7 @@ const ChatContext = createContext<ChatContextType>({
     chatId: '',
     isError: null,
     stop: () => {},
+    loadingChat: false,
 });
 
 interface ChatProviderProps {
@@ -53,6 +55,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
 
     const authTokenRef = useRef<string | null>(null);
     const [chatId, setChatId] = useState<string>(generateId());
+    const [loadingChat, setLoadingChat] = useState<boolean>(false);
     const [isResponseLoading, setIsResponseLoading] = useState<boolean>(false);
     const [model, setModel] = useState<Models>(Models.Meta);
     const [authToken, setAuthToken] = useState<string | null>(null);
@@ -68,27 +71,8 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         if (!authTokenRef.current) fetchToken();
     }, [getAccessToken]);
 
-    const setChat = async (newChatId: string) => {
-        if (!newChatId) return;
-        setChatId(newChatId);
-
-        const chat = await fetch(`/api/chats/${newChatId}`, {
-            headers: {
-                Authorization: `Bearer ${await getAccessToken()}`,
-            },
-        });
-        const chatData = await chat.json();
-        if (chatData) setMessages(chatData.messages || []);
-        else setIsError('Chat does not exist');
-    };
-
-    const resetChat = () => {
-        setChatId(generateId());
-        setMessages([]);
-    };
-
     const { messages, append, isLoading, setMessages, stop } = useAiChat({
-        maxSteps: 2,
+        maxSteps: 8,
         api: `/api/chat`,
         body: {
             model,
@@ -102,6 +86,28 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
             mutateChats();
         },
     });
+
+    const setChat = async (newChatId: string) => {
+        if (!newChatId) return;
+        setIsError(null);
+        setChatId(newChatId);
+        setLoadingChat(true);
+
+        const chat = await fetch(`/api/chats/${newChatId}`, {
+            headers: {
+                Authorization: `Bearer ${await getAccessToken()}`,
+            },
+        });
+        const chatData = await chat.json();
+        if (chatData && chatData?.messages?.length > 0) setMessages(chatData.messages || []);
+        setLoadingChat(false);
+        // else setIsError('Chat does not exist');
+    };
+
+    const resetChat = () => {
+        setChatId(generateId());
+        setMessages([]);
+    };
 
     const sendMessage = async (message: string) => {
         if (!message.trim()) return;
@@ -130,6 +136,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                 chatId,
                 isError,
                 stop: stopStreaming,
+                loadingChat: loadingChat,
             }}
         >
             {children}

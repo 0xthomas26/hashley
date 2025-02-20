@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useMemo, useEffect, ReactNode, useContext } from 'react';
+import { createContext, useState, ReactNode, useContext, useEffect } from 'react';
 import { ThemeProvider as MuiThemeProvider, CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from '@/src/theme';
 
@@ -26,33 +26,26 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     const [mode, setMode] = useState<ThemeMode>(ThemeMode.SYSTEM);
-    const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
-        const savedMode = localStorage.getItem('theme') as ThemeMode;
-        setMode(savedMode || ThemeMode.SYSTEM);
-        setHydrated(true);
+        const savedMode = localStorage.getItem('theme') as ThemeMode | null;
+        if (savedMode) {
+            setMode(savedMode);
+        } else {
+            if (typeof window !== 'undefined') {
+                const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? ThemeMode.DARK
+                    : ThemeMode.LIGHT;
+                setMode(systemPreference);
+            }
+        }
     }, []);
 
-    const theme = useMemo(() => {
-        if (!hydrated) return lightTheme; // Return a default theme during SSR
-
-        if (mode === ThemeMode.SYSTEM) {
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme;
-        }
-        return mode === ThemeMode.DARK ? darkTheme : lightTheme;
-    }, [mode, hydrated]);
-
     useEffect(() => {
-        if (hydrated) {
-            localStorage.setItem('theme', mode);
-        }
-    }, [mode, hydrated]);
+        if (typeof window !== 'undefined') localStorage.setItem('theme', mode);
+    }, [mode]);
 
-    if (!hydrated) {
-        // Prevent rendering until hydration is complete
-        return null;
-    }
+    const theme = mode === ThemeMode.DARK ? darkTheme : lightTheme;
 
     return (
         <ThemeContext.Provider value={{ mode, setMode }}>

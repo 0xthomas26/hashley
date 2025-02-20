@@ -27,14 +27,13 @@ const MessageInput: React.FC = () => {
     };
 
     const handleSubmit = async () => {
+        sendMessage(input);
+        setInput('');
         if (id !== chatId) {
             const token = await getAccessToken();
-            await createChat(chatId, token!);
             router.push(`/chat/${chatId}`);
+            await createChat(chatId, token!);
         }
-        sendMessage(input);
-
-        setInput('');
     };
 
     return (
