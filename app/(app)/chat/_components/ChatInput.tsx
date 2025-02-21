@@ -4,6 +4,8 @@ import MessageInput from './MessageInput';
 import MenuButton from './MenuButton';
 import ModelMenu from './ModelMenu';
 import { ThemeMode, useThemeMode } from '@/app/_contexts/theme';
+import Attachments from './Attachments';
+import FilePreview from './FilePreview';
 
 const ChatInput: React.FC = () => {
     const theme = useTheme();
@@ -12,6 +14,7 @@ const ChatInput: React.FC = () => {
 
     return (
         <Paper sx={{ width: '100%', px: 2, py: 2, mb: 4, borderRadius: '10px' }} elevation={3}>
+            <FilePreview />
             <MessageInput />
             <Box
                 sx={{
@@ -22,7 +25,10 @@ const ChatInput: React.FC = () => {
                     mt: 2,
                 }}
             >
-                <MenuButton setAnchorEl={setAnchorEl} />
+                <Box>
+                    <Attachments />
+                    <MenuButton setAnchorEl={setAnchorEl} />
+                </Box>
                 <ModelMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mt: { xs: 2, md: 0 } }}>
                     Use{' '}

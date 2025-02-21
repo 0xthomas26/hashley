@@ -15,7 +15,7 @@ const MessageInput: React.FC = () => {
     const { getAccessToken } = usePrivy();
     const { id } = useParams();
 
-    const { chatId, isLoading, isResponseLoading, isError, sendMessage, stop } = useChat();
+    const { chatId, isLoading, isResponseLoading, isError, sendMessage, stop, files } = useChat();
 
     const [input, setInput] = useState<string>('');
 
@@ -68,7 +68,7 @@ const MessageInput: React.FC = () => {
                 />
                 <IconButton
                     onClick={() => (isLoading ? stop() : handleSubmit())}
-                    disabled={input.length === 0 && !isLoading}
+                    disabled={!input.trim() && (!files || files.length === 0) && !isLoading}
                     sx={{
                         background: theme.palette.primary.main,
                         color: theme.palette.primary.contrastText,

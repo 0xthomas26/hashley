@@ -26,15 +26,17 @@ interface ChatContextType {
     isError: string | null;
     stop: () => void;
     loadingChat: boolean;
+    setFiles: (file: File[] | null) => void;
+    files: File[] | null;
 }
 
 const ChatContext = createContext<ChatContextType>({
     messages: [],
     isLoading: false,
-    sendMessage: async (message: string) => null,
+    sendMessage: async (_message: string) => null,
     isResponseLoading: false,
     setIsResponseLoading: () => {},
-    append: async (message: Partial<CreateMessage>, chatRequestOptions?: ChatRequestOptions) => null,
+    append: async (_message: Partial<CreateMessage>, _chatRequestOptions?: ChatRequestOptions) => null,
     model: Models.Meta,
     setModel: () => {},
     setChat: () => {},
@@ -43,6 +45,8 @@ const ChatContext = createContext<ChatContextType>({
     isError: null,
     stop: () => {},
     loadingChat: false,
+    setFiles: () => {},
+    files: null,
 });
 
 interface ChatProviderProps {
@@ -60,6 +64,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const [model, setModel] = useState<Models>(Models.Meta);
     const [authToken, setAuthToken] = useState<string | null>(null);
     const [isError, setIsError] = useState<string | null>(null);
+    const [files, setFiles] = useState<File[] | null>(null);
 
     useEffect(() => {
         const fetchToken = async () => {
@@ -74,13 +79,13 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const { messages, append, isLoading, setMessages, stop } = useAiChat({
         maxSteps: 8,
         api: `/api/chat`,
-        body: {
-            model,
-            chatId,
-        },
-        headers: {
-            Authorization: `Bearer ${authToken}`,
-        },
+        // body: {
+        //     model,
+        //     chatId,
+        // },
+        // headers: {
+        //     Authorization: `Bearer ${authToken}`,
+        // },
         onResponse: () => {
             setIsResponseLoading(false);
             mutateChats();
@@ -110,9 +115,31 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     };
 
     const sendMessage = async (message: string) => {
-        if (!message.trim()) return;
+        if ((!message || message.trim() === '') && (!files || files.length === 0)) return;
         setIsResponseLoading(true);
-        await append({ role: 'user', content: message });
+
+        let attachments: FileList | undefined = undefined;
+
+        if (files && files.length > 0) {
+            const dataTransfer = new DataTransfer();
+            files.forEach((file) => dataTransfer.items.add(file));
+            attachments = dataTransfer.files;
+        }
+
+        try {
+            setFiles(null);
+            await append(
+                { role: 'user', content: message },
+                {
+                    headers: { Authorization: `Bearer ${authToken}`, 'Content-Type': 'multipart/form-data' },
+                    experimental_attachments: attachments,
+                    body: { model, chatId },
+                }
+            );
+        } catch (err: any) {
+            console.error('Error sending message:', err?.message);
+            setIsResponseLoading(false);
+        }
     };
 
     const stopStreaming = () => {
@@ -137,6 +164,8 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                 isError,
                 stop: stopStreaming,
                 loadingChat: loadingChat,
+                setFiles,
+                files,
             }}
         >
             {children}

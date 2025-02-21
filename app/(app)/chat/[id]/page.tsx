@@ -11,6 +11,8 @@ import Markdown from '@/components/ui/MarkDown';
 import { ArrowDownward } from '@mui/icons-material';
 import CircularLoading from '@/components/ui/CircularLoading';
 import TrendingTokensTool, { ExtendedToolInvocation } from '../_components/TrendingTokensTool';
+import { FilePresentOutlined } from '@mui/icons-material';
+import Image from 'next/image';
 
 const ChatIdPage: React.FC = () => {
     const router = useRouter();
@@ -22,9 +24,10 @@ const ChatIdPage: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [atBottom, setAtBottom] = useState<boolean>(true);
+    const [isDragging, setIsDragging] = useState<boolean>(false);
 
     const { id } = useParams();
-    const { messages, loadingChat, isResponseLoading, isLoading, isError, setChat } = useChat();
+    const { messages, loadingChat, isResponseLoading, isLoading, isError, setChat, files, setFiles } = useChat();
 
     const scrollToBottom = () => {
         if (lastMessageRef.current) {
@@ -38,6 +41,26 @@ const ChatIdPage: React.FC = () => {
             const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10; // 10px threshold
             setAtBottom(isAtBottom);
         }
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(false);
+
+        if (!e.dataTransfer || !e.dataTransfer.files || e.dataTransfer.files.length === 0) return;
+
+        const droppedFiles: File[] = Array.from(e.dataTransfer.files);
+
+        setFiles(files ? [...files, ...droppedFiles] : droppedFiles);
     };
 
     useEffect(() => {
@@ -66,6 +89,10 @@ const ChatIdPage: React.FC = () => {
 
     return (
         <Box
+            component="div"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             sx={{
                 height: '100%',
                 display: 'flex',
@@ -74,6 +101,45 @@ const ChatIdPage: React.FC = () => {
                 alignItems: 'center',
             }}
         >
+            {isDragging && (
+                <Box
+                    sx={(theme) => ({
+                        position: 'fixed', // Covers the entire viewport
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor:
+                            theme.palette.mode === 'dark'
+                                ? theme.palette.background.default + 'CC' // Dark mode semi-transparent
+                                : theme.palette.background.default + '80', // Light mode semi-transparent
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1300, // Ensures it's above everything
+                        backdropFilter: 'blur(4px)', // ✅ Smooth Glassmorphism Effect
+                    })}
+                >
+                    <Typography
+                        variant="body1"
+                        sx={(theme) => ({
+                            fontSize: theme.typography.h4.fontSize,
+                            fontWeight: theme.typography.h4.fontWeight,
+                            fontFamily: theme.typography.h4.fontFamily,
+                            padding: '20px 40px',
+                            borderRadius: '12px',
+                            backgroundColor: theme.palette.background.paper, // ✅ Uses themed background
+                            color: theme.palette.text.primary, // ✅ Adaptive text color
+                            boxShadow: theme.shadows[10], // ✅ Uses theme shadows
+                            transition: theme.transitions.create(['opacity', 'transform'], {
+                                duration: theme.transitions.duration.short, // ✅ Smooth animations
+                            }),
+                        })}
+                    >
+                        Drop your files here
+                    </Typography>
+                </Box>
+            )}
             <Typography variant="h4" align="center" gutterBottom sx={{ mb: 4 }}>
                 Chat {isXs && id ? formatWalletAddress(id as string) : id}
             </Typography>
@@ -104,48 +170,123 @@ const ChatIdPage: React.FC = () => {
                 {/* Messages list */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 4 }}>
                     {messages && messages.length > 0 ? (
-                        messages.map((message, index) =>
+                        messages.map((message) =>
                             message.parts?.map((part, index) => {
-                                if (part.type === 'text')
-                                    return (
-                                        <Paper
-                                            key={index}
-                                            sx={{
-                                                alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
-                                                padding: 2,
-                                                borderRadius: 2,
-                                                maxWidth: '100%',
-                                                background:
-                                                    message.role === 'user'
-                                                        ? theme.palette.background.paper
-                                                        : 'transparent',
-                                                zIndex: 1,
-                                            }}
-                                            elevation={0}
-                                        >
-                                            {message.role === 'user' ? (
-                                                <Typography variant="body1">{part.text}</Typography>
-                                            ) : (
-                                                <Markdown>{part.text}</Markdown>
+                                return (
+                                    <Box
+                                        key={index}
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                        }}
+                                    >
+                                        {/* Display Attachments Before Message Content */}
+                                        {message?.experimental_attachments &&
+                                            message?.experimental_attachments?.length > 0 && (
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexWrap: 'wrap',
+                                                        gap: 1,
+                                                        mb: 1,
+                                                        justifyContent:
+                                                            message.role === 'user' ? 'flex-end' : 'flex-start',
+                                                    }}
+                                                >
+                                                    {message?.experimental_attachments?.map((attachment, i) => (
+                                                        <Box
+                                                            key={i}
+                                                            sx={{
+                                                                display: 'flex',
+                                                                flexDirection: 'column',
+                                                                maxWidth: '50%',
+                                                                borderRadius: '12px',
+                                                            }}
+                                                        >
+                                                            {/* Render image or PDF */}
+                                                            {attachment?.contentType?.startsWith('image/') ? (
+                                                                <Box
+                                                                    sx={{
+                                                                        position: 'relative',
+                                                                        width: '100%',
+                                                                        overflow: 'hidden',
+                                                                    }}
+                                                                >
+                                                                    <Image
+                                                                        src={attachment.url}
+                                                                        alt={`attachment: ${attachment.name}`}
+                                                                        width={200}
+                                                                        height={0}
+                                                                        sizes="auto"
+                                                                        style={{
+                                                                            height: 'auto',
+                                                                            objectFit: 'contain',
+                                                                            borderRadius: '8px',
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                            ) : (
+                                                                <Paper
+                                                                    sx={{
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: 1,
+                                                                        p: 1,
+                                                                    }}
+                                                                    elevation={0}
+                                                                >
+                                                                    <FilePresentOutlined />
+                                                                    <Typography fontSize={12}>
+                                                                        {attachment.name}
+                                                                    </Typography>
+                                                                </Paper>
+                                                            )}
+                                                        </Box>
+                                                    ))}
+                                                </Box>
                                             )}
-                                        </Paper>
-                                    );
-                                else if (part.type === 'tool-invocation')
-                                    return (
-                                        <Box
-                                            key={index}
-                                            sx={{
-                                                alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
-                                            }}
-                                        >
-                                            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                                                {part.toolInvocation.toolName}
-                                            </Typography>
-                                            <TrendingTokensTool
-                                                toolInvocation={part.toolInvocation as ExtendedToolInvocation}
-                                            />
-                                        </Box>
-                                    );
+
+                                        {/* Display Text Content */}
+                                        {part.type === 'text' && (
+                                            <Paper
+                                                sx={{
+                                                    alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+                                                    padding: 2,
+                                                    borderRadius: 2,
+                                                    maxWidth: message.role === 'user' ? '75%' : '100%',
+                                                    background:
+                                                        message.role === 'user'
+                                                            ? theme.palette.background.paper
+                                                            : 'transparent',
+                                                    zIndex: 1,
+                                                }}
+                                                elevation={0}
+                                            >
+                                                {message.role === 'user' ? (
+                                                    <Typography variant="body1">{part.text}</Typography>
+                                                ) : (
+                                                    <Markdown>{part.text}</Markdown>
+                                                )}
+                                            </Paper>
+                                        )}
+
+                                        {/* Tool Invocation (if any) */}
+                                        {part.type === 'tool-invocation' && (
+                                            <Box
+                                                sx={{
+                                                    alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+                                                }}
+                                            >
+                                                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                                                    {part.toolInvocation.toolName}
+                                                </Typography>
+                                                <TrendingTokensTool
+                                                    toolInvocation={part.toolInvocation as ExtendedToolInvocation}
+                                                />
+                                            </Box>
+                                        )}
+                                    </Box>
+                                );
                             })
                         )
                     ) : !isError && !isResponseLoading && !isLoading && !loadingChat ? (
