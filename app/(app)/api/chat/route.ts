@@ -2,7 +2,7 @@
 
 import { NextResponse, NextRequest } from 'next/server';
 import { verifyToken } from '@/lib/auth';
-import { appendResponseMessages, Message, streamText, StreamTextResult } from 'ai';
+import { appendResponseMessages, streamText, StreamTextResult } from 'ai';
 import { ollama } from '@/ai/ollamaProvider';
 import { geminiModel } from '@/ai/geminiProvider';
 import { updateMessagesByChatId } from '@/services/supabase/chats';

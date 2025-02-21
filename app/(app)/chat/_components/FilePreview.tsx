@@ -3,6 +3,7 @@ import { IconButton, Box, Typography } from '@mui/material';
 import { useChat } from '../_contexts/chat';
 import CloseIcon from '@mui/icons-material/Close';
 import { FilePresentOutlined } from '@mui/icons-material';
+import Image from 'next/image';
 
 const FilePreview: React.FC = () => {
     const { files, setFiles } = useChat();
@@ -26,12 +27,12 @@ const FilePreview: React.FC = () => {
                     position="relative"
                 >
                     {file.type.startsWith('image/') ? (
-                        <img
+                        <Image
                             src={URL.createObjectURL(file)}
                             alt={file.name}
                             width={30}
                             height={30}
-                            style={{ objectFit: 'cover', borderRadius: '4px' }}
+                            style={{ objectFit: 'contain', borderRadius: '4px' }}
                         />
                     ) : (
                         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
