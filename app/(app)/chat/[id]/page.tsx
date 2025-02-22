@@ -251,7 +251,7 @@ const ChatIdPage: React.FC = () => {
                                             <Paper
                                                 sx={{
                                                     alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
-                                                    padding: 2,
+                                                    padding: message.role === 'user' ? 2 : 0,
                                                     borderRadius: 2,
                                                     maxWidth: message.role === 'user' ? '75%' : '100%',
                                                     background:

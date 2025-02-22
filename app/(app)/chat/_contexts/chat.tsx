@@ -61,7 +61,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const [chatId, setChatId] = useState<string>(generateId());
     const [loadingChat, setLoadingChat] = useState<boolean>(false);
     const [isResponseLoading, setIsResponseLoading] = useState<boolean>(false);
-    const [model, setModel] = useState<Models>(Models.Meta);
+    const [model, setModel] = useState<Models>(Models.Gemini);
     const [authToken, setAuthToken] = useState<string | null>(null);
     const [isError, setIsError] = useState<string | null>(null);
     const [files, setFiles] = useState<File[] | null>(null);
