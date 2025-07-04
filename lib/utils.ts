@@ -15,5 +15,5 @@ export const nFormatter = (num: number) => {
     if (num < 1000 && num % 1 !== 0) {
         return num.toFixed(2).replace(/\.?0+$/, '');
     }
-    return num;
+    return num.toString();
 };

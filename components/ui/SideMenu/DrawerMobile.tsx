@@ -209,7 +209,7 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
                             <Typography variant="body1">Logout</Typography>
                         </Box>
                     </ListItemButton>
-                    <ListItemButton>
+                    {/* <ListItemButton>
                         <Box
                             sx={{
                                 display: 'flex',
@@ -221,8 +221,8 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
                             <FaXTwitter style={{ fontSize: theme.typography.fontSize * 1.4 }} />
                             <Typography variant="body1">Follow us</Typography>
                         </Box>
-                    </ListItemButton>
-                    <ListItemButton>
+                    </ListItemButton> */}
+                    {/* <ListItemButton>
                         <Box
                             sx={{
                                 display: 'flex',
@@ -234,7 +234,7 @@ const DrawerMobile: React.FC<DrawerMobileProps> = ({
                             <FaDiscord style={{ fontSize: theme.typography.fontSize * 1.4 }} />
                             <Typography variant="body1">Join Discord</Typography>
                         </Box>
-                    </ListItemButton>
+                    </ListItemButton> */}
                 </List>
             </Box>
         </Drawer>

@@ -30,7 +30,7 @@ const ChatPage: React.FC = () => {
                 Your AI-powered DeFi agents.
             </Typography>
             <ChatInput />
-            <FooterButtons />
+            {/* <FooterButtons /> */}
         </Container>
     );
 };

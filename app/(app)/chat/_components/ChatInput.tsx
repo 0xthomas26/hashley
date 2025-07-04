@@ -6,11 +6,14 @@ import ModelMenu from './ModelMenu';
 import { ThemeMode, useThemeMode } from '@/app/_contexts/theme';
 import Attachments from './Attachments';
 import FilePreview from './FilePreview';
+import CharacterMenu from './CharacterMenu';
+import CharacterButton from './CharacterButton';
 
 const ChatInput: React.FC = () => {
     const theme = useTheme();
     const { mode } = useThemeMode();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorElCharacter, setAnchorElCharacter] = useState<null | HTMLElement>(null);
 
     return (
         <Paper sx={{ width: '100%', px: 2, py: 2, mb: 4, borderRadius: '10px' }} elevation={3}>
@@ -28,8 +31,10 @@ const ChatInput: React.FC = () => {
                 <Box>
                     <Attachments />
                     <MenuButton setAnchorEl={setAnchorEl} />
+                    <CharacterButton setAnchorEl={setAnchorElCharacter} />
                 </Box>
                 <ModelMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+                <CharacterMenu anchorEl={anchorElCharacter} setAnchorEl={setAnchorElCharacter} />
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mt: { xs: 2, md: 0 } }}>
                     Use{' '}
                     <Box

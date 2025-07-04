@@ -7,7 +7,7 @@ export enum Roles {
 export type Role = 'user' | 'assistant' | 'system';
 
 export type Message = {
-    id: string;
+    id?: string;
     chat_id: string;
     user_id: string;
     role: Role;

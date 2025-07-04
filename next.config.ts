@@ -11,9 +11,13 @@ const nextConfig: NextConfig = {
         BIRDEYE_API_KEY: process.env.BIRDEYE_API_KEY,
         GEMINI_API_KEY: process.env.GEMINI_API_KEY,
         COINGECKO_API_KEY: process.env.COINGECKO_API_KEY,
+        ALCHEMY_API_KEY: process.env.ALCHEMY_API_KEY,
+        HELIUS_API_KEY: process.env.HELIUS_API_KEY,
+        MONGODB_URI: process.env.MONGODB_URI,
+        MONGODB_DB_NAME: process.env.MONGODB_DB_NAME,
     },
     images: {
-        domains: ['coin-images.coingecko.com'],
+        domains: ['coin-images.coingecko.com', 'ipfs.io', 'raw.githubusercontent.com', 'file.dexlab.space'],
     },
 };
 

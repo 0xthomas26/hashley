@@ -20,12 +20,12 @@ interface Token {
     };
 }
 
-export type ExtendedToolInvocation = ToolInvocation & {
+export type TrendingToolInvocation = ToolInvocation & {
     result: ToolResult;
 };
 
 interface TrendingTokensToolProps {
-    toolInvocation: ExtendedToolInvocation;
+    toolInvocation: TrendingToolInvocation;
 }
 
 const TrendingTokensTool: React.FC<TrendingTokensToolProps> = ({ toolInvocation }) => {

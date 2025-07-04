@@ -1,9 +1,9 @@
 'use server';
 
 import { NextResponse, NextRequest } from 'next/server';
-import { getUserChats } from '@/services/supabase/chats';
+import { getUserChats } from '@/services/mongodb/chats';
 import { verifyToken } from '@/lib/auth';
-import { createChat } from '@/services/supabase/chats';
+import { createChat } from '@/services/mongodb/chats';
 
 // GET USER'S CHATS
 export const GET = async (req: NextRequest) => {

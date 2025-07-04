@@ -237,7 +237,7 @@ const MenuDesktop: React.FC<MenuDesktopProps> = ({
                         sx={{ display: 'flex', justifyContent: collapsed ? 'center' : 'flex-start' }}
                     />
                 </ListItemButton>
-                <ListItemButton sx={{ px: 2 }}>
+                {/* <ListItemButton sx={{ px: 2 }}>
                     <ListItemText
                         primary={
                             collapsed ? (
@@ -280,7 +280,7 @@ const MenuDesktop: React.FC<MenuDesktopProps> = ({
                         }
                         sx={{ display: 'flex', justifyContent: collapsed ? 'center' : 'flex-start' }}
                     />
-                </ListItemButton>
+                </ListItemButton> */}
             </List>
         </Box>
     );

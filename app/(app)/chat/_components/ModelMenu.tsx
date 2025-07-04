@@ -21,7 +21,21 @@ const ModelMenu: React.FC<ModelMenuProps> = ({ anchorEl, setAnchorEl }) => {
     };
 
     return (
-        <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+        <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+            transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+            }}
+        >
             {Object.values(Models).map((modelValue) => (
                 <MenuItem
                     key={modelValue}

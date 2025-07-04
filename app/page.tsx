@@ -4,6 +4,7 @@ import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import Header from './_components/Header';
 import LoginButton from './_components/LoginButton';
+import Support from './_components/Support';
 
 const HomePage: React.FC = () => {
     return (
@@ -28,6 +29,7 @@ const HomePage: React.FC = () => {
                         and execute swaps.
                     </Typography>
                     <LoginButton text="Get Started" sx={{ mt: 2 }} />
+                    <Support />
                 </Box>
             </Container>
         </Box>

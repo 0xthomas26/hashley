@@ -1,7 +1,7 @@
 'use server';
 
 import { NextResponse, NextRequest } from 'next/server';
-import { deleteChatById, getChatById, updateMessagesByChatId } from '@/services/supabase/chats';
+import { deleteChatById, getChatById, updateMessagesByChatId } from '@/services/mongodb/chats';
 import { verifyToken } from '@/lib/auth';
 
 // GET CHAT BY ID

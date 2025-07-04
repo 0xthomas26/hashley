@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Card, CardContent } from '@mui/material';
 
-const footerButtons = [{ title: 'Trending' }, { title: 'Trade' }, { title: 'Stake' }, { title: 'Knowledge' }];
+const footerButtons = [{ title: 'Trending' }, { title: 'Trade' }];
 
 const FooterButtons: React.FC = () => {
     return (

@@ -10,9 +10,10 @@ import { useChat } from '../_contexts/chat';
 import Markdown from '@/components/ui/MarkDown';
 import { ArrowDownward } from '@mui/icons-material';
 import CircularLoading from '@/components/ui/CircularLoading';
-import TrendingTokensTool, { ExtendedToolInvocation } from '../_components/TrendingTokensTool';
+import TrendingTokensTool, { TrendingToolInvocation } from '../_components/TrendingTokensTool';
 import { FilePresentOutlined } from '@mui/icons-material';
 import Image from 'next/image';
+import TokenDataTool, { TokenDataToolInvocation } from '../_components/TokenData';
 
 const ChatIdPage: React.FC = () => {
     const router = useRouter();
@@ -86,6 +87,7 @@ const ChatIdPage: React.FC = () => {
             lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages]);
+    console.log(messages);
 
     return (
         <Box
@@ -280,9 +282,16 @@ const ChatIdPage: React.FC = () => {
                                                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                                                     {part.toolInvocation.toolName}
                                                 </Typography>
-                                                <TrendingTokensTool
-                                                    toolInvocation={part.toolInvocation as ExtendedToolInvocation}
-                                                />
+                                                {part.toolInvocation.toolName === 'market-get-trending-tokens' && (
+                                                    <TrendingTokensTool
+                                                        toolInvocation={part.toolInvocation as TrendingToolInvocation}
+                                                    />
+                                                )}
+                                                {part.toolInvocation.toolName === 'token-get-token-data' && (
+                                                    <TokenDataTool
+                                                        toolInvocation={part.toolInvocation as TokenDataToolInvocation}
+                                                    />
+                                                )}
                                             </Box>
                                         )}
                                     </Box>
