@@ -42,7 +42,7 @@ const ChatContext = createContext<ChatContextType>({
     model: Models.Meta,
     setModel: () => {},
     personalityId: '',
-    setPersonalityId: (id: string) => {},
+    setPersonalityId: (_id: string) => {},
     setChat: () => {},
     resetChat: () => {},
     chatId: '',

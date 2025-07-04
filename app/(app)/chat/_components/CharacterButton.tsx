@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { KeyboardArrowDownRounded } from '@mui/icons-material';
-import Image from 'next/image';
-import { modelLogos } from '@/types';
 import { useChat } from '../_contexts/chat';
 import { personalityStore } from '@/ai/character';
 

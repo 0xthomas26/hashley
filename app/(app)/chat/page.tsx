@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Container, Typography } from '@mui/material';
-import FooterButtons from './_components/FooterButtons';
 import ChatInput from './_components/ChatInput';
 import FakeChat from './_components/FakeChat';
 import { useChat } from './_contexts/chat';
