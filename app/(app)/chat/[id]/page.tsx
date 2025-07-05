@@ -8,12 +8,13 @@ import { formatWalletAddress } from '@/lib/utils';
 import Button from '@/components/ui/Button';
 import { useChat } from '../_contexts/chat';
 import Markdown from '@/components/ui/MarkDown';
-import { ArrowDownward } from '@mui/icons-material';
+import { ArrowDownward, SwapHoriz } from '@mui/icons-material';
 import CircularLoading from '@/components/ui/CircularLoading';
 import TrendingTokensTool, { TrendingToolInvocation } from '../_components/TrendingTokensTool';
 import { FilePresentOutlined } from '@mui/icons-material';
 import Image from 'next/image';
 import TokenDataTool, { TokenDataToolInvocation } from '../_components/TokenData';
+import SwapDialog from '../_components/SwapDialog';
 
 const ChatIdPage: React.FC = () => {
     const router = useRouter();
@@ -26,6 +27,7 @@ const ChatIdPage: React.FC = () => {
 
     const [atBottom, setAtBottom] = useState<boolean>(true);
     const [isDragging, setIsDragging] = useState<boolean>(false);
+    const [swapOpen, setSwapOpen] = useState(false);
 
     const { id } = useParams();
     const { messages, loadingChat, isResponseLoading, isLoading, isError, setChat, files, setFiles } = useChat();
@@ -87,7 +89,6 @@ const ChatIdPage: React.FC = () => {
             lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages]);
-    console.log(messages);
 
     return (
         <Box
@@ -345,6 +346,28 @@ const ChatIdPage: React.FC = () => {
                     </IconButton>
                 )}
             </Box>
+
+            <SwapDialog open={swapOpen} onClose={() => setSwapOpen(false)} />
+            <Button
+                onClick={() => setSwapOpen(true)}
+                sx={{
+                    position: 'fixed',
+                    bottom: 24,
+                    right: 24,
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    color: 'text.primary',
+                    boxShadow: (theme) => theme.shadows[6],
+                    '&:hover': {
+                        backgroundColor: (theme) => theme.palette.background.paper,
+                        boxShadow: (theme) => theme.shadows[10],
+                    },
+                    zIndex: 1300,
+                }}
+                startIcon={<SwapHoriz />}
+            >
+                Swap
+            </Button>
+
             {/* Chat input at the bottom */}
             {!isError && (
                 <Container maxWidth="md" sx={{ pt: 2, position: 'sticky', bottom: 0 }}>

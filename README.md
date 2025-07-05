@@ -77,11 +77,11 @@ Open **http://localhost:3000** in your browser.
 
 1. **Ask about trending tokens**:
 
-    _Example:_ `What’s are the trending tokens?`
+    _Example:_ `What are the trending tokens?`
 
 2. **Ask about tokens metadata**:
 
-    _Example:_ `What’s is this token 0x455e53CBB86018Ac2B8092FdCd39d8444aFFC3F6?`
+    _Example:_ `What is this token 0x455e53CBB86018Ac2B8092FdCd39d8444aFFC3F6?`
 
 3. **Customize AI personalities**:
 

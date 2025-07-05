@@ -15,9 +15,16 @@ const nextConfig: NextConfig = {
         HELIUS_API_KEY: process.env.HELIUS_API_KEY,
         MONGODB_URI: process.env.MONGODB_URI,
         MONGODB_DB_NAME: process.env.MONGODB_DB_NAME,
+        ZEROX_API_KEY: process.env.ZEROX_API_KEY,
     },
     images: {
-        domains: ['coin-images.coingecko.com', 'ipfs.io', 'raw.githubusercontent.com', 'file.dexlab.space'],
+        domains: [
+            'cryptologos.cc',
+            'coin-images.coingecko.com',
+            'ipfs.io',
+            'raw.githubusercontent.com',
+            'file.dexlab.space',
+        ],
     },
 };
 
